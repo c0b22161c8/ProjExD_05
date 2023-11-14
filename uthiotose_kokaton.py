@@ -449,7 +449,7 @@ def main():
     emys = pg.sprite.Group()
     boss = pg.sprite.Group()
     s_boss = pg.sprite.Group()
-    boss_hp = Boss_HP(100)
+    boss_hp = Boss_HP(50)
     tmr = 0
     x = 0
     clock = pg.time.Clock()
@@ -478,7 +478,7 @@ def main():
                 aircraft.speed = 10
         screen.blit(bg_img, [0, 0])
         if boss_attack:
-            screen.blit(bg_img_b, [0, 0])
+            screen.blit(bg_img_b, [0, -200])
 
         if not boss_attack:
             if tmr%200 == 0:  # 200フレームに1回，敵機を出現させる
@@ -620,7 +620,7 @@ def main():
         exps.draw(screen)
         score.update(screen)
         beam_status.update(screen, x)
-        if score.score > 20 and boss_attack==False:
+        if score.score > 50 and boss_attack==False:
             boss_attack = True
             boss.add(Boss())
             s_boss.add(S_Boss(200))
