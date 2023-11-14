@@ -510,9 +510,11 @@ def main():
 
         for bomb in pg.sprite.groupcollide(boss_bombs, beams, True, True).keys():
             exps.add(Explosion(bomb, 50))  # 爆発エフェクト
+            score.score_up(1)  # 1点アップ
 
         for bomb in pg.sprite.groupcollide(small_bombs, beams, True, True).keys():
             exps.add(Explosion(bomb, 50))  # 爆発エフェクト
+            score.score_up(1)  # 1点アップ
 
         for bos in pg.sprite.groupcollide(boss, beams, False, True).keys():
             exps.add(Explosion(bos, 50))  # 爆発エフェクト
@@ -520,7 +522,7 @@ def main():
 
         for bos in pg.sprite.groupcollide(boss, charge_beam, False, True).keys():
             exps.add(Explosion(bos, 50))  # 爆発エフェクト
-            boss_hp.now_life -= 1
+            boss_hp.now_life -= 5
 
         for bomb in pg.sprite.groupcollide(bombs, beams, True, True).keys():
             exps.add(Explosion(bomb, 50))  # 爆発エフェクト
@@ -624,6 +626,9 @@ def main():
             s_boss.add(S_Boss(200))
             s_boss.add(S_Boss(1200))
         if boss_hp.now_life<1:
+            score.score_up(100)  # 100点アップ
+            score.font = pg.font.Font(None, 250)
+            score.rect.center = WIDTH/2-250, HEIGHT/2
             score.update(screen)
             pg.display.update()
             time.sleep(2)
