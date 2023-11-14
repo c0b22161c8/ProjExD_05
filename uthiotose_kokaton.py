@@ -241,10 +241,8 @@ class Charge_Beam(pg.sprite.Sprite):
         angle = math.degrees(math.atan2(-self.vy, self.vx))
         if 10 <= x <20:
             self.image = pg.transform.rotozoom(pg.image.load(f"ex04/fig/beam.png"), angle, 3.0)
-            self.damage = 5
         elif 20 <= x:
             self.image = pg.transform.rotozoom(pg.image.load(f"ex04/fig/beam.png"), angle, 5.0)
-            self.damage = 10
         self.vx = math.cos(math.radians(angle))
         self.vy = -math.sin(math.radians(angle))
         self.rect = self.image.get_rect()
@@ -522,9 +520,7 @@ def main():
 
         for bos in pg.sprite.groupcollide(boss, charge_beam, False, True).keys():
             exps.add(Explosion(bos, 50))  # 爆発エフェクト
-
-        for c_beam in pg.sprite.groupcollide(charge_beam, boss, False, True).keys():
-            boss_hp.now_life -= c_beam.damage
+            boss_hp.now_life -= 1
 
         for bomb in pg.sprite.groupcollide(bombs, beams, True, True).keys():
             exps.add(Explosion(bomb, 50))  # 爆発エフェクト
