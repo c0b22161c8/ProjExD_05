@@ -241,8 +241,10 @@ class Charge_Beam(pg.sprite.Sprite):
         angle = math.degrees(math.atan2(-self.vy, self.vx))
         if 10 <= x <20:
             self.image = pg.transform.rotozoom(pg.image.load(f"ex04/fig/beam.png"), angle, 3.0)
+            self.damage = 5
         elif 20 <= x:
             self.image = pg.transform.rotozoom(pg.image.load(f"ex04/fig/beam.png"), angle, 5.0)
+            self.damage = 10
         self.vx = math.cos(math.radians(angle))
         self.vy = -math.sin(math.radians(angle))
         self.rect = self.image.get_rect()
@@ -435,6 +437,7 @@ def main():
     pg.display.set_caption("こうかとんを撃ち落とす")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex05/fig/pg_bg.jpg")
+    bg_img_b = pg.transform.rotozoom(pg.image.load("ex05/fig/Hell-0.png"), 0, 2)
     boss_attack = False
     score = Score()
     aircraft = Aircraft((800, 825))
@@ -476,6 +479,8 @@ def main():
             if event.type == pg.KEYUP and event.key == pg.K_LSHIFT:
                 aircraft.speed = 10
         screen.blit(bg_img, [0, 0])
+        if boss_attack:
+            screen.blit(bg_img_b, [0, 0])
 
         if not boss_attack:
             if tmr%200 == 0:  # 200フレームに1回，敵機を出現させる
@@ -517,7 +522,9 @@ def main():
 
         for bos in pg.sprite.groupcollide(boss, charge_beam, False, True).keys():
             exps.add(Explosion(bos, 50))  # 爆発エフェクト
-            boss_hp.now_life -= 1
+
+        for c_beam in pg.sprite.groupcollide(charge_beam, boss, False, True).keys():
+            boss_hp.now_life -= c_beam.damage
 
         for bomb in pg.sprite.groupcollide(bombs, beams, True, True).keys():
             exps.add(Explosion(bomb, 50))  # 爆発エフェクト
@@ -558,7 +565,8 @@ def main():
 
         if len(pg.sprite.spritecollide(aircraft, bombs, True)) != 0:
             aircraft.change_img(screen)
-
+            score.font = pg.font.Font(None, 250)
+            score.rect.center = WIDTH/2-250, HEIGHT/2
             score.update(screen)
             pg.display.update()
             time.sleep(2)
@@ -566,6 +574,8 @@ def main():
 
         if len(pg.sprite.spritecollide(aircraft,boss_bombs,True)) !=0:#ボス用こうかとんの当たり判定
             aircraft.change_img(screen)
+            score.font = pg.font.Font(None, 250)
+            score.rect.center = WIDTH/2-250, HEIGHT/2
             score.update(screen)
             pg.display.update()
             time.sleep(2)
@@ -573,6 +583,8 @@ def main():
 
         if len(pg.sprite.spritecollide(aircraft,small_bombs,True)) !=0:#小ボス用こうかとんの当たり判定
             aircraft.change_img(screen)
+            score.font = pg.font.Font(None, 250)
+            score.rect.center = WIDTH/2-250, HEIGHT/2
             score.update(screen)
             pg.display.update()
             time.sleep(2)
@@ -580,6 +592,8 @@ def main():
 
         if len(pg.sprite.spritecollide(aircraft, bombs, True)) != 0:
             aircraft.change_img(screen) # 戦闘機爆発エフェクト
+            score.font = pg.font.Font(None, 250)
+            score.rect.center = WIDTH/2-250, HEIGHT/2
             score.update(screen)
             pg.display.update()
             time.sleep(2)
